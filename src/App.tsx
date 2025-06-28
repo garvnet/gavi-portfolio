@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence, Reorder, useMotionValue, useTransform } from 'framer-motion'
+import { motion, AnimatePresence, Reorder } from 'framer-motion'
 import './App.css'
 import Web3Hero from './Web3Hero'
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts'
