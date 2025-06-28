@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence, Reorder } from 'framer-motion'
 import './App.css'
 import Web3Hero from './Web3Hero'
+import CryptoCoin3D from './CryptoCoin3D'
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts'
 
 const NAV_ITEMS = [
@@ -78,6 +79,11 @@ function App() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [notificationsEnabled, setNotificationsEnabled] = useState(true)
   const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(true)
+
+  // Apply theme to document
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light')
+  }, [isDarkMode])
 
   // Simulate real-time updates
   useEffect(() => {
@@ -450,7 +456,10 @@ function App() {
         {activeTab === 'dashboard' && (
           <section className="glass-section" style={{ marginTop: '0', marginBottom: '2rem' }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Web3Hero />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '1rem' }}>
+                <Web3Hero />
+                <CryptoCoin3D />
+              </div>
               <h1 className="gradient-text" style={{ fontSize: '3rem', margin: '1.5rem 0 0.5rem' }}>
                 WEB3 PORTFOLIO
               </h1>

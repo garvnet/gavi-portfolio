@@ -7,10 +7,25 @@ export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? '/gavi-portfolio/' : '/',
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          three: ['three', '@react-three/fiber', '@react-three/drei'],
+          charts: ['recharts'],
+          animations: ['framer-motion'],
+          icons: ['lucide-react']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000
   },
   server: {
     port: 5173,
     host: true,
   },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'framer-motion', 'recharts', 'three']
+  }
 })
