@@ -5,6 +5,38 @@ import Web3Hero from './Web3Hero'
 import CryptoCoin3D from './CryptoCoin3D'
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts'
 
+// Type definitions
+interface Asset {
+  id: string
+  symbol: string
+  name: string
+  quantity: number
+  price: number
+}
+
+interface CryptoData {
+  symbol: string
+  name: string
+  price: number
+  change: number
+  volume: number
+}
+
+interface PortfolioData {
+  date: string
+  value: number
+}
+
+interface FormEvent {
+  preventDefault: () => void
+}
+
+interface TooltipProps {
+  active?: boolean
+  payload?: Array<{ value: number }>
+  label?: string
+}
+
 const NAV_ITEMS = [
   { id: 'dashboard', label: 'Dashboard' },
   { id: 'portfolio', label: 'Portfolio' },
@@ -13,13 +45,13 @@ const NAV_ITEMS = [
   { id: 'settings', label: 'Settings' },
 ]
 
-const DUMMY_ASSETS = [
+const DUMMY_ASSETS: Asset[] = [
   { id: 'btc', symbol: 'BTC', name: 'Bitcoin', quantity: 0.5, price: 48000 },
   { id: 'eth', symbol: 'ETH', name: 'Ethereum', quantity: 2, price: 3200 },
 ]
 
 // Dummy crypto data
-const generateCryptoData = () => [
+const generateCryptoData = (): CryptoData[] => [
   { symbol: 'BTC', name: 'Bitcoin', price: 45000 + Math.random() * 5000, change: (Math.random() - 0.5) * 10, volume: 25000000000 },
   { symbol: 'ETH', name: 'Ethereum', price: 3000 + Math.random() * 500, change: (Math.random() - 0.5) * 8, volume: 15000000000 },
   { symbol: 'ADA', name: 'Cardano', price: 1.5 + Math.random() * 0.5, change: (Math.random() - 0.5) * 12, volume: 2000000000 },
@@ -28,8 +60,8 @@ const generateCryptoData = () => [
 ]
 
 // Generate portfolio performance data
-const generatePortfolioData = () => {
-  const data = []
+const generatePortfolioData = (): PortfolioData[] => {
+  const data: PortfolioData[] = []
   let value = 10000
   for (let i = 0; i < 30; i++) {
     value += (Math.random() - 0.5) * 1000
@@ -64,12 +96,12 @@ const ParticleEffect = ({ x, y }: { x: number; y: number }) => (
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [activeTab, setActiveTab] = useState('dashboard')
-  const [cryptoData, setCryptoData] = useState(generateCryptoData())
-  const [portfolioData, setPortfolioData] = useState(generatePortfolioData())
-  const [assets, setAssets] = useState(DUMMY_ASSETS)
+  const [cryptoData, setCryptoData] = useState<CryptoData[]>(generateCryptoData())
+  const [portfolioData, setPortfolioData] = useState<PortfolioData[]>(generatePortfolioData())
+  const [assets, setAssets] = useState<Asset[]>(DUMMY_ASSETS)
   const [showAddModal, setShowAddModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
-  const [editingAsset, setEditingAsset] = useState<any>(null)
+  const [editingAsset, setEditingAsset] = useState<Asset | null>(null)
   const [addForm, setAddForm] = useState({ symbol: '', quantity: '', price: '' })
   const [editForm, setEditForm] = useState({ symbol: '', quantity: '', price: '' })
   const [tileAction, setTileAction] = useState({ id: '', type: '' })
@@ -150,7 +182,7 @@ function App() {
     }, 600)
   }
 
-  const handleLogin = (e: any) => {
+  const handleLogin = (e: FormEvent) => {
     e.preventDefault()
     if (loginForm.email && loginForm.password) {
       setIsLoggedIn(true)
@@ -162,9 +194,9 @@ function App() {
     setActiveTab('dashboard')
   }
 
-  const handleAddAsset = (e: any) => {
+  const handleAddAsset = (e: FormEvent) => {
     e.preventDefault()
-    const newAsset = {
+    const newAsset: Asset = {
       id: Date.now().toString(),
       symbol: addForm.symbol.toUpperCase(),
       name: addForm.symbol.toUpperCase(),
@@ -178,7 +210,7 @@ function App() {
     setTimeout(() => setTileAction({ id: '', type: '' }), 600)
   }
 
-  const handleEditAsset = (e: any) => {
+  const handleEditAsset = (e: FormEvent) => {
     e.preventDefault()
     if (editingAsset) {
       setAssets(prev => prev.map(asset => 
@@ -200,13 +232,13 @@ function App() {
     }, 400)
   }
 
-  const openEditModal = (asset: any) => {
+  const openEditModal = (asset: Asset) => {
     setEditingAsset(asset)
     setEditForm({ symbol: asset.symbol, quantity: asset.quantity.toString(), price: asset.price.toString() })
     setShowEditModal(true)
   }
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
     if (active && payload && payload.length) {
       return (
         <div className="glass-section" style={{ padding: '10px', border: '1px solid #7f5af0' }}>
