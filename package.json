@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "./deploy.sh",
+    "deploy:gh": "npm run build && gh repo edit --homepage https://garvnet.github.io/gavi-portfolio/"
   },
   "dependencies": {
     "@react-three/drei": "^10.3.0",
